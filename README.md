@@ -39,35 +39,7 @@ Draft PRs are excluded from all categories.
 1. Go to [Slack API Apps](https://api.slack.com/apps)
 2. Click **Create New App** → **From manifest**
 3. Select your workspace
-4. Paste this manifest:
-
-```json
-{
-  "_metadata": { "major_version": 1, "minor_version": 1 },
-  "display_information": { "name": "PR Status Bot" },
-  "features": {
-    "bot_user": { "display_name": "PR Status Bot", "always_online": true },
-    "slash_commands": [{
-      "command": "/prs",
-      "description": "Check PR status for your team",
-      "usage_hint": "[team_name] or 'help'",
-      "url": "https://YOUR_APP.vercel.app/api/slack/events"
-    }]
-  },
-  "oauth_config": {
-    "scopes": { "bot": ["chat:write", "commands"] }
-  },
-  "settings": {
-    "interactivity": {
-      "is_enabled": true,
-      "request_url": "https://YOUR_APP.vercel.app/api/slack/events"
-    },
-    "org_deploy_enabled": false,
-    "socket_mode_enabled": false
-  }
-}
-```
-
+4. Paste the contents of [`manifest.json`](manifest.json)
 5. Click **Create**
 6. Go to **Install App** → **Install to Workspace**
 7. Copy the **Bot Token** (`xoxb-...`) and **Signing Secret**
