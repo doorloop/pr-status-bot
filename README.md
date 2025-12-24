@@ -8,29 +8,30 @@ A Slack bot that shows your team's open PRs categorized by status.
 
 | Category | Description |
 |----------|-------------|
-| 💬 **Has Comments** | PRs with unresolved review comments or change requests |
-| 👀 **Needs Reviewers** | PRs without reviewers or review activity |
-| 🔴 **Failing Checks** | PRs with failing CI |
-| 🟢 **Ready to Merge** | Approved PRs with passing CI and no conflicts |
+| **Has Comments** | PRs with unresolved review comments or change requests |
+| **Needs Reviewers** | PRs without reviewers or review activity |
+| **Failing Checks** | PRs with failing CI |
+| **Ready to Merge** | Approved PRs with passing CI and no conflicts |
 
 Draft PRs are excluded from all categories.
 
 ---
 
-## Deployment Guide
+## Deployment
 
-### 1. Create a GitHub Fine-Grained Personal Access Token
+### 1. Create a GitHub Fine-Grained PAT
 
-1. Go to [GitHub Settings → Tokens](https://github.com/settings/tokens?type=beta)
+1. Go to [GitHub Tokens](https://github.com/settings/tokens?type=beta)
 2. Click **Generate new token**
 3. Configure:
    - **Name**: `pr-status-bot`
-   - **Expiration**: Choose as needed
+   - **Resource owner**: Your organization
    - **Repository access**: Select your target repository
-   - **Permissions**:
+   - **Repository permissions**:
      - `Actions`: Read-only
      - `Pull requests`: Read-only
-     - `Metadata`: Read-only (auto-selected)
+   - **Organization permissions**:
+     - `Members`: Read-only
 4. Click **Generate token** and copy it
 
 ### 2. Create a Slack App
@@ -38,7 +39,7 @@ Draft PRs are excluded from all categories.
 1. Go to [Slack API Apps](https://api.slack.com/apps)
 2. Click **Create New App** → **From manifest**
 3. Select your workspace
-4. Paste this manifest (update the URL after Vercel deployment):
+4. Paste this manifest:
 
 ```json
 {
@@ -57,9 +58,6 @@ Draft PRs are excluded from all categories.
     "scopes": { "bot": ["chat:write", "commands"] }
   },
   "settings": {
-    "event_subscriptions": {
-      "request_url": "https://YOUR_APP.vercel.app/api/slack/events"
-    },
     "interactivity": {
       "is_enabled": true,
       "request_url": "https://YOUR_APP.vercel.app/api/slack/events"
@@ -72,13 +70,11 @@ Draft PRs are excluded from all categories.
 
 5. Click **Create**
 6. Go to **Install App** → **Install to Workspace**
-7. Note down:
-   - **Bot Token** (`xoxb-...`) from OAuth & Permissions
-   - **Signing Secret** from Basic Information
+7. Copy the **Bot Token** (`xoxb-...`) and **Signing Secret**
 
 ### 3. Deploy to Vercel
 
-1. Fork or push this repo to your GitHub
+1. Fork this repo to your GitHub
 2. Go to [Vercel](https://vercel.com) → **Add New Project**
 3. Import your repository
 4. Add environment variables:
@@ -88,26 +84,21 @@ Draft PRs are excluded from all categories.
 | `SLACK_BOT_TOKEN` | `xoxb-...` from Slack |
 | `SLACK_SIGNING_SECRET` | From Slack Basic Information |
 | `GITHUB_TOKEN` | Your fine-grained PAT |
-| `GITHUB_OWNER` | Organization name (e.g., `myorg`) |
-| `GITHUB_REPO` | Repository name (e.g., `myrepo`) |
+| `GITHUB_OWNER` | Organization name |
+| `GITHUB_REPO` | Repository name |
 
 5. Click **Deploy**
-6. Copy your deployment URL (e.g., `https://pr-status-bot-xxx.vercel.app`)
 
-### 4. Update Slack App URLs
+### 4. Update Slack App URL
 
-1. Go back to your [Slack App](https://api.slack.com/apps)
-2. Update these URLs with your Vercel deployment URL:
-   - **Slash Commands** → Edit `/prs` → Request URL
-   - **Event Subscriptions** → Request URL
-   - **Interactivity & Shortcuts** → Request URL
+Replace `YOUR_APP` in the Slack manifest with your Vercel URL:
+- **Slash Commands** → `/prs` → Request URL
+- **Interactivity** → Request URL
 
-All URLs should be: `https://YOUR_APP.vercel.app/api/slack/events`
+### 5. Disable Vercel Authentication
 
-### 5. Disable Vercel Authentication (Important!)
-
-1. Go to Vercel → Your Project → **Settings** → **Deployment Protection**
-2. Set **Vercel Authentication** to **Disabled** (or add bypass for Slack)
+1. Vercel → Project → **Settings** → **Deployment Protection**
+2. Set **Vercel Authentication** to **Disabled**
 
 ---
 
@@ -116,30 +107,15 @@ All URLs should be: `https://YOUR_APP.vercel.app/api/slack/events`
 ```
 /prs              # Show all team PRs
 /prs backend      # Show backend team PRs only
-/prs help         # Show help
+/prs help         # Show available teams
 ```
-
----
-
-## Team Configuration
-
-Teams are fetched automatically from your GitHub organization. The bot lists all org teams and their members.
-
-**Required token permissions:**
-- `Organization: Read-only` (to list teams)
-- `Organization / Members: Read-only` (to list team members)
 
 ---
 
 ## Local Development
 
-1. Copy `.env.example` to `.env` and fill in values
-2. Get an [ngrok auth token](https://dashboard.ngrok.com/get-started/your-authtoken)
-3. Run:
-
 ```bash
+cp .env.example .env  # Fill in values
 bun install
-bun run dev
+bun run dev           # Starts server with ngrok tunnel
 ```
-
-This starts a local server with ngrok tunnel for Slack webhook testing.
