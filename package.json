@@ -8,7 +8,8 @@
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "ngrok": "^5.0.0-beta.2"
+    "ngrok": "^5.0.0-beta.2",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@ngrok/ngrok": "^1.7.0",
