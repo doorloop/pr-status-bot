@@ -1,5 +1,7 @@
 # PR Status Bot
 
+<img src="assets/bot-icon.png" alt="PR Status Bot" width="128" />
+
 A Slack bot that shows your team's open PRs categorized by status.
 
 ## Categories
