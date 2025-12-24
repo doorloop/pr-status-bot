@@ -62,11 +62,19 @@ async function fetchPRsForAuthors(authors: string[]): Promise<PullRequest[]> {
   }));
 }
 
-async function hasFailingChecks(sha: string): Promise<boolean> {
+async function hasFailingChecks(sha: string): Promise<boolean | null> {
   const client = getOctokit();
   const { owner, repo } = getRepoInfo();
-  const { data } = await client.checks.listForRef({ owner, repo, ref: sha });
-  return data.check_runs.some(c => c.status === 'completed' && c.conclusion === 'failure');
+  try {
+    const { data } = await client.checks.listForRef({ owner, repo, ref: sha });
+    return data.check_runs.some(c => c.status === 'completed' && c.conclusion === 'failure');
+  } catch (error) {
+    // Token may not have checks:read permission - return null to indicate unknown
+    if (error instanceof Error && 'status' in error && error.status === 403) {
+      return null;
+    }
+    throw error;
+  }
 }
 
 async function categorizePRs(prs: PullRequest[]): Promise<CategorizedPRs> {
@@ -74,13 +82,13 @@ async function categorizePRs(prs: PullRequest[]): Promise<CategorizedPRs> {
   const failingStatuses = await Promise.all(prs.map(pr => hasFailingChecks(pr.head.sha)));
 
   for (const [i, pr] of prs.entries()) {
-    const isFailing = failingStatuses[i] ?? false;
+    const isFailing = failingStatuses[i]; // null = unknown, true = failing, false = passing
     if (!pr.draft) {
       if (pr.comments > 0 || pr.review_comments > 0) result.hasComments.push(pr);
       if (pr.requested_reviewers.length === 0) result.noReviewers.push(pr);
     }
-    if (isFailing) result.failing.push(pr);
-    if (pr.mergeable === true && pr.mergeable_state === 'clean') result.mergeable.push(pr);
+    if (isFailing === true) result.failing.push(pr);
+    if (pr.mergeable === true && pr.mergeable_state === 'clean' && isFailing === false) result.mergeable.push(pr);
   }
   return result;
 }
