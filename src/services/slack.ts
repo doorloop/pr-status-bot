@@ -11,7 +11,7 @@ function getTimeAgo(dateString: string): string {
 }
 
 function formatPRItem(pr: PullRequest): string {
-  return `<${pr.html_url}|#${pr.number}> ${pr.title}\n      _by ${pr.user.login} • ${getTimeAgo(pr.created_at)}_`;
+  return `<${pr.html_url}|#${pr.number}> ${pr.title}\n      _by ${pr.author} • ${getTimeAgo(pr.createdAt)}_`;
 }
 
 function createSection(emoji: string, title: string, prs: PullRequest[]): (Block | KnownBlock)[] {
