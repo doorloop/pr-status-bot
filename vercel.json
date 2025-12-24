@@ -1,4 +1,5 @@
 {
-  "version": 2,
-  "framework": null
+  "buildCommand": "bun install",
+  "devCommand": "bun run dev",
+  "installCommand": "bun install"
 }
