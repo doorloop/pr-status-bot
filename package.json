@@ -5,11 +5,13 @@
   "private": true,
   "scripts": {
     "dev": "bun run --watch src/dev.ts",
+    "build": "bun run scripts/build.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@vercel/node": "^5.5.16"
+    "@vercel/node": "^5.5.16",
+    "esbuild": "^0.27.2"
   },
   "peerDependencies": {
     "typescript": "^5"
