@@ -15,8 +15,9 @@ const prStatusCallback = async ({
 
   // Help command
   if (text === 'help') {
+    const teams = await getAvailableTeams();
     await respond({
-      blocks: formatHelpBlocks(getAvailableTeams()),
+      blocks: formatHelpBlocks(teams),
       response_type: 'ephemeral',
     });
     return;
@@ -33,14 +34,15 @@ const prStatusCallback = async ({
     let teamName: string | undefined;
 
     if (text === '' || text === 'all') {
-      authors = getAllMembers();
+      authors = await getAllMembers();
     } else {
       try {
-        authors = getTeamMembers(text);
+        authors = await getTeamMembers(text);
         teamName = text;
       } catch {
+        const teams = await getAvailableTeams();
         await respond({
-          blocks: formatErrorBlocks(`Unknown team "${text}". Available: ${getAvailableTeams().join(', ')}`),
+          blocks: formatErrorBlocks(`Unknown team "${text}". Available: ${teams.join(', ')}`),
           response_type: 'ephemeral',
           replace_original: true,
         });
