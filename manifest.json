@@ -13,7 +13,7 @@
     },
     "slash_commands": [
       {
-        "command": "/pr-status",
+        "command": "/prs",
         "description": "Check PR status for your team",
         "usage_hint": "[team_name] or 'help'",
         "should_escape": false,
