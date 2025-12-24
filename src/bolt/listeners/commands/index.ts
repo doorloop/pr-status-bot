@@ -1,8 +1,8 @@
 import type { App } from "@slack/bolt";
-import prStatusCallback from "./pr-status.js";
+import prsCallback from "./prs.js";
 
 const register = (app: App) => {
-  app.command("/pr-status", prStatusCallback);
+  app.command("/prs", prsCallback);
 };
 
 export default { register };

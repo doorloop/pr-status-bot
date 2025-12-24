@@ -56,7 +56,7 @@ export function formatErrorBlocks(error: string): (Block | KnownBlock)[] {
 export function formatHelpBlocks(teams: string[]): (Block | KnownBlock)[] {
   return [
     { type: 'header', text: { type: 'plain_text', text: 'PR Status Bot Help', emoji: true } },
-    { type: 'section', text: { type: 'mrkdwn', text: '*Usage:*\n`/pr-status` - All PRs\n`/pr-status [team]` - Team PRs\n`/pr-status help` - Help' } },
+    { type: 'section', text: { type: 'mrkdwn', text: '*Usage:*\n`/prs` - All PRs\n`/prs [team]` - Team PRs\n`/prs help` - Help' } },
     { type: 'section', text: { type: 'mrkdwn', text: `*Teams:* ${teams.join(', ')}` } },
   ];
 }
