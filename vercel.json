@@ -1,16 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "bun run build",
-  "builds": [
-    {
-      "src": "dist/api/slack.js",
-      "use": "@vercel/node"
+  "functions": {
+    "api/*.ts": {
+      "runtime": "@vercel/node@3"
     }
-  ],
-  "routes": [
-    {
-      "src": "/api/slack",
-      "dest": "/dist/api/slack.js"
-    }
-  ]
+  }
 }
