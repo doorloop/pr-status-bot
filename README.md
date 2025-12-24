@@ -124,7 +124,19 @@ All URLs should be: `https://YOUR_APP.vercel.app/api/slack/events`
 
 ## Team Configuration
 
-Teams are configured via environment variables:
+Teams can come from two sources:
+
+### 1. GitHub Org Teams (Automatic)
+
+If `GITHUB_OWNER` is a GitHub organization, the bot automatically fetches all org teams and their members. No additional configuration needed.
+
+**Required token permissions:**
+- `Organization: Read-only` (to list teams)
+- `Organization / Members: Read-only` (to list team members)
+
+### 2. Environment Variables (Override/Fallback)
+
+You can define teams via environment variables. These **override** GitHub org teams with the same name:
 
 ```bash
 # Define team names
@@ -137,6 +149,11 @@ TEAM_DEVOPS=eve
 ```
 
 The variable name format is `TEAM_<UPPERCASE_NAME>`.
+
+**Use env vars when:**
+- Your repo is under a user account (not an org)
+- You want to override org team membership
+- You need custom team groupings
 
 ---
 
