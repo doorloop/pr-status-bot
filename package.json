@@ -11,9 +11,11 @@
     "ngrok": "^5.0.0-beta.2"
   },
   "dependencies": {
+    "@ngrok/ngrok": "^1.7.0",
     "@octokit/rest": "^22.0.1",
     "@slack/bolt": "^4.6.0",
     "@vercel/slack-bolt": "^1.0.3",
+    "dotenv": "^17.2.3",
     "hono": "^4.11.1"
   }
 }

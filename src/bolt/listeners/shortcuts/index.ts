@@ -1,8 +1,7 @@
 import type { App } from "@slack/bolt";
-import { sampleShortcutCallback } from "./sample-shortcut.js";
 
-const register = (app: App) => {
-  app.shortcut("sample_shortcut_id", sampleShortcutCallback);
+const register = (_app: App) => {
+  // No shortcuts registered
 };
 
 export default { register };

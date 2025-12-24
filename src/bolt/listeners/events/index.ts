@@ -1,8 +1,7 @@
 import type { App } from "@slack/bolt";
-import { appHomeOpenedCallback } from "./app-home-opened.js";
 
-const register = (app: App) => {
-  app.event("app_home_opened", appHomeOpenedCallback);
+const register = (_app: App) => {
+  // No event handlers registered
 };
 
 export default { register };
