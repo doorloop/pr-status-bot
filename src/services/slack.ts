@@ -36,8 +36,8 @@ export function formatPRStatusBlocks(categorized: CategorizedPRs, teamName?: str
     { type: 'header', text: { type: 'plain_text', text: 'PR Status Report', emoji: true } },
     { type: 'section', text: { type: 'mrkdwn', text: `Found *${allNums.size}* open PRs${teamLabel}` } },
     { type: 'divider' },
-    ...createSection('💬', 'Has Comments (Not Draft)', categorized.hasComments),
-    ...createSection('👀', 'Needs Reviewers (Not Draft)', categorized.noReviewers),
+    ...createSection('💬', 'Has Comments', categorized.hasComments),
+    ...createSection('👀', 'Needs Reviewers', categorized.noReviewers),
     ...createSection('🔴', 'Failing Checks', categorized.failing),
     ...createSection('🟢', 'Ready to Merge', categorized.mergeable),
   ];

@@ -38,7 +38,7 @@ export interface CategorizedPRs {
 // =============================================================================
 
 /**
- * Category 1: Has Unresolved Comments (Not Draft)
+ * Category 1: Has Unresolved Comments
  * - PR is NOT a draft
  * - PR has unresolved review comments or change requests
  */
@@ -50,7 +50,7 @@ export function belongsToHasComments(pr: PRDetails): boolean {
 }
 
 /**
- * Category 2: Needs Reviewers (Not Draft)
+ * Category 2: Needs Reviewers 
  * - PR is NOT a draft
  * - PR has NO requested reviewers
  * - PR has NOT been reviewed yet (no approvals or feedback)
