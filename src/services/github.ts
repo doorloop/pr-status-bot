@@ -101,22 +101,28 @@ async function fetchPRDetails(
   // Also consider CHANGES_REQUESTED as unresolved feedback
   const hasChangesRequested = reviews.some(r => r.state === 'CHANGES_REQUESTED');
 
-  // Fetch CI status
+  // Fetch CI status using Actions API (works with fine-grained PATs)
   let hasCIFailure: boolean | null = null;
   let hasCIPassing: boolean | null = null;
 
   try {
-    const { data: checks } = await client.checks.listForRef({
+    const { data: runs } = await client.actions.listWorkflowRunsForRepo({
       owner,
       repo,
-      ref: pr.head.sha,
+      branch: pr.head.ref,
+      per_page: 10,
     });
 
-    const completedChecks = checks.check_runs.filter(c => c.status === 'completed');
-    hasCIFailure = completedChecks.some(c => c.conclusion === 'failure');
-    hasCIPassing = completedChecks.length > 0 && completedChecks.every(c => c.conclusion === 'success');
+    // Filter to runs for this specific commit
+    const commitRuns = runs.workflow_runs.filter(r => r.head_sha === pr.head.sha);
+    const completedRuns = commitRuns.filter(r => r.status === 'completed');
+
+    if (completedRuns.length > 0) {
+      hasCIFailure = completedRuns.some(r => r.conclusion === 'failure');
+      hasCIPassing = completedRuns.every(r => r.conclusion === 'success');
+    }
   } catch (error) {
-    // Token may not have checks:read permission - leave as null
+    // Token may not have actions:read permission - leave as null
     if (!(error instanceof Error && 'status' in error && error.status === 403)) {
       throw error;
     }
