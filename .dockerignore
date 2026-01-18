@@ -1,0 +1,30 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+.vercel
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Development
+scripts
+
+# Version control
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Documentation
+README.md
+assets
+
+# Misc
+*.log
+.DS_Store
